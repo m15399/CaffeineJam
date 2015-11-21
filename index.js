@@ -49,7 +49,7 @@ io.on('connection', function(socket){
   });
 });
 
-var port = 3003;
+var port = 9000;
 
 http.listen(port, function(){
   console.log('listening on *: ' + port);
