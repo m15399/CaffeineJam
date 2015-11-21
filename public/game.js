@@ -74,16 +74,23 @@ function mainLoop(){
 
 	framesThisSec++;
 
-	// var delay = 1000/60;
-	// setTimeout(function(){
-	// 	window.requestAnimationFrame(mainLoop);
-	// }, delay);
+	var throttle = false;
+	if(throttle){
+		var delay = 1000/60;
+		setTimeout(function(){
+			window.requestAnimationFrame(mainLoop);
+		}, delay);
+	} else {
+		window.requestAnimationFrame(mainLoop);
+	}
 
-	window.requestAnimationFrame(mainLoop);
 }
 
 var map = Map.create();
-var p = Player.create();
+for(var i = 0; i < 50; i++){
+	Pickup.create(randomDouble(0, 64 * map.w), randomDouble(0, 64 * map.h))
+}
+var player = Player.create();
 
 window.requestAnimationFrame(mainLoop);
 

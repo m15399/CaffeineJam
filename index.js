@@ -30,6 +30,7 @@ io.on('connection', function(socket){
 
   socket.on('myNameIs', function(msg){
   	socket.playerName = msg;
+    console.log(msg + ' connected!');
   });
 
   socket.on('dcAll', function(msg){

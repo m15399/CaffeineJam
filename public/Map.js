@@ -3,7 +3,6 @@
 var tileImages = [
 	undefined,
 	loadImage('wood-tile.png'),
-	loadImage('wood-tile.png'),
 ];
 
 var Map = makeClass('Map', GameObject);
@@ -21,8 +20,25 @@ Map.init = function(){
 
 Map.generateTiles = function(){
 	for(var i = 0; i < this.w * this.h; i++){
-		this.tiles[i] = randomInt(0, 2);
+		this.tiles[i] = 1;
 	}
+
+	var holes = this.w * this.h / 8;
+
+	for(var i = 0; i < holes; i++){
+		var x = randomInt(0, this.w);
+		var y = randomInt(0, this.h);
+
+		for(var j = x; j < x+2 && j < this.w; j++){
+			for(var k = y; k < y+2 && k < this.h; k++){
+				this.tiles[k*this.w + j] = 0;
+			}
+		}
+	}
+}
+
+Map.getTile = function(x, y){
+	return this.tiles[this.w * y + x];
 }
 
 Map.draw = function(g){

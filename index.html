@@ -19,7 +19,10 @@ console.log('***************');
 
 socket.on('welcome', function(msg){
 	sid = msg;
+	console.log('recieved welcome, id is ' + msg);
 });
+
+socket.emit('myNameIs', 'bob');
 
 </script>
 </head>
@@ -33,9 +36,11 @@ socket.on('welcome', function(msg){
 <script src="/Utils.js"></script>
 <script src="/Globals.js"></script>
 
+<script src="/Map.js"></script>
+
 <script src="/Camera.js"></script>
 <script src="/Player.js"></script>
-<script src="/Map.js"></script>
+<script src="/Pickup.js"></script>
 
 <!-- Main -->
 <script src="/game.js"></script>
