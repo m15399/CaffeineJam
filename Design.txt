@@ -1,0 +1,11 @@
+
+Multiplayer
+Run around and drink coffee, tea
+You get faster and/or bigger the more you drink
+You gain points based on how much caffeine you have
+If you get pushed off the level you lose all your caffeine
+You try to get a bunch of caffeine and knock the powerful people off the level
+Use one caffeine point to shoot 
+
+Level size needs to scale with num players
+

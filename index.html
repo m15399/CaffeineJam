@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Caffeinage</title>
+
+<style type="text/css">
+	body {
+		margin: 0;
+		border: 0;
+		overflow: hidden;
+	}
+</style>
+<script src="/socket.io-1.2.0.js"></script>
+<script>
+
+var socket = io();
+var sid;
+
+console.log('***************');
+
+socket.on('welcome', function(msg){
+	sid = msg;
+});
+
+</script>
+</head>
+
+<canvas></canvas>
+
+<!-- Includes -->
+<script src="/class.js"></script>
+<script src="/GameObject.js"></script>
+<script src="/Input.js"></script>
+<script src="/Utils.js"></script>
+<script src="/Globals.js"></script>
+
+<script src="/Camera.js"></script>
+<script src="/Player.js"></script>
+<script src="/Map.js"></script>
+
+<!-- Main -->
+<script src="/game.js"></script>
+</body>
+</html>
