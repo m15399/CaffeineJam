@@ -34,7 +34,10 @@ InputClass.keys = [
 	'w', 87,
 	'a', 65,
 	's', 83,
-	'd', 68
+	'd', 68,
+	'1', 49,
+	'2', 50,
+	'3', 51
 ];
 
 InputClass.keyboard = function(e, down){

@@ -108,6 +108,14 @@ Player.updateInput = function(dt){
 	if(Input.pressed.down)
 		this.fire(0, 1);
 
+	if(Input.pressed[1])
+		this.skin = 0;
+	if(Input.pressed[2])
+		this.skin = 1;
+	if(Input.pressed[3])
+		this.skin = 2;
+	
+
 	if(nInX != this.inX || nInY != this.inY || this.reload == this.reloadTime){
 		this.inX = nInX;
 		this.inY = nInY;
@@ -265,6 +273,11 @@ Player.draw = function(g){
 	// floor collision box
 	g.fillStyle = 'rgba(255, 0, 0, .5)';
 	// g.fillRect(this.x-this.fw/2, this.y-this.fh/2, this.fw, this.fh);
+
+	g.fillStyle = 'white';
+	g.font = '14px Arial';
+	g.textAlign = 'center';
+	g.fillText(this.name, this.x, this.y-80);
 
 }
 

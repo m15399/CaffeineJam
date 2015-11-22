@@ -24,7 +24,13 @@ function randomInt(min, max){
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function generateMap(){
+function generateMap(numPlayers){
+
+  var side = Math.round(Math.sqrt(numPlayers * 42));
+  w = side+2;
+  h = side;
+  tiles = [];
+
   for(var i = 0; i < w * h; i++){
     tiles[i] = 1;
   }
@@ -48,9 +54,15 @@ function generateMap(){
       }
     }
   }
+
+  // plcae pickups
   for(var i = 0; i < w * h / 70; i++){
     replacePickup(i);
   }
+
+
+  io.emit('map', [w, h, tiles]);
+  io.emit('pus', pickups);
 }
 
 function getTile(x, y){
@@ -79,21 +91,35 @@ function replacePickup(num){
 var pickups = [];
 var players = [];
 var freePlayers = [];
+var numPlayers = 0;
 
+var roundTime;
 
 function dcPlayer(pid){
   players[pid] = undefined;
   freePlayers.push(pid);
 }
 
-generateMap();
+var endTimeout;
+function startAGame(){
+  endTimeout = setTimeout(endGame, 1000 * 60 * 2);
+  generateMap(numPlayers+2);
+}
+
+function endGame(){
+  io.emit('endGame', undefined);
+  setTimeout(function(){
+    startAGame();
+  }, 10000);
+}
+
+startAGame();
 
 io.on('connection', function(socket){
-  console.log('a user connected ' + socket.id);
+  // console.log('a user connected ' + socket.id);
 
   // socket.playerName = '';
   // socket.playerReady = false;
-  // numPlayers++;
 
   var spot;
   if(freePlayers.length == 0){
@@ -104,21 +130,28 @@ io.on('connection', function(socket){
   players[spot] = socket;
   socket.pid = spot;
 
+  numPlayers++;
+
   socket.emit('welcome', spot);
 
+
   socket.emit('map', [w, h, tiles]);
-  for(var i = 0; i < players.length; i++){
-    if(players[i] != undefined && players[i].lastUpdate){
-      socket.emit('player', players[i].lastUpdate);
-    }
-  }
+  // for(var i = 0; i < players.length; i++){
+  //   if(players[i] != undefined && players[i].lastUpdate){
+  //     socket.emit('player', players[i].lastUpdate);
+  //   }
+  // }
 
   socket.emit('pus', pickups);
 
 
 
 
-
+  socket.on('hax', function(msg){
+    if(msg == 'end'){
+      endGame();
+    }
+  });
 
   socket.on('msg', function(msg){
     if(msg[0] == 'player'){
@@ -148,9 +181,10 @@ io.on('connection', function(socket){
   // });
 
   socket.on('disconnect', function(){
-    console.log('user disconnected: ' + socket.playerName);
+    console.log(socket.playerName + ' disconnected');
     dcPlayer(socket.pid);
     socket.broadcast.emit('dcPlayer', socket.pid);
+    numPlayers--;
   });
 });
 

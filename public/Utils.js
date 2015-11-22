@@ -84,3 +84,59 @@ function roundArray(a){
 	}
 	return a;
 }
+
+function hax(s){
+	socket.emit('hax', s);
+}
+
+// var Timer = makeClass('Timer', GameObject);
+
+// Timer.init = function(t, callback){
+// 	GameObject.init.apply(this);
+// 	this.time = t;
+// 	this.cb = callback;
+// }
+
+// Timer.update = function(dt){
+// 	this.time -= dt;
+// 	if(this.time < 0){
+// 		this.cb();
+// 		this.destroy();
+// 	}
+// }
+
+var Title = makeClass('Title', GameObject);
+
+var titleImage = loadImage('title.png');
+
+Title.init = function(){
+	GameObject.init.apply(this);
+
+	this.time = 0;
+
+	this.drawOrder = 20;
+}
+
+Title.update = function(dt){
+	this.time += dt;
+	if(this.time > 10)
+		this.destroy();
+}
+
+Title.draw = function(g){
+	var alpha = ((5 - this.time) / 3);
+	alpha = clamp(alpha, 0, 1);
+
+	g.save();
+	camera.reverseTransform(g);
+
+	g.globalAlpha = alpha;
+
+	g.drawImage(titleImage, WIDTH/2-420, HEIGHT/2-270);
+
+	g.globalAlpha = 1;
+	g.restore();
+}
+
+
+

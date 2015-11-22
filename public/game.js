@@ -1,4 +1,14 @@
 
+
+/*
+
+music
+bumping?
+big text
+fall animation
+
+*/
+
 var canvas = document.getElementsByTagName('canvas')[0];
 var g = canvas.getContext('2d');
 canvas.mozImageSmoothingEnabled = false;
@@ -49,6 +59,8 @@ function mainLoop(){
 	updateAll(dt);
 	Input.postUpdate();
 
+	roundLeft -= dt;
+
 	// Draw
 
 	// Clear screen
@@ -89,23 +101,43 @@ function mainLoop(){
 }
 
 var map = Map.create();
+var players = [];
+
+var scoreboard = Scoreboard.create();
+var roundTime = 60 * 2;
+
+var roundLeft = 0;
+
+socket.on('endGame', function(msg){
+	scoreboard.zoomed = true;
+});
 
 socket.on('map', function(msg){
 	map.setTiles(msg[0],msg[1],msg[2]);
-});
+	var lp = players[lpid];
+	if(lp){
+		lp.score = 0;
+		lp.respawn();
+	}
+	scoreboard.zoomed = false;
+	roundLeft = roundTime;
 
-var players = [];
+	Title.create();
+});
 
 socket.on('welcome', function(msg){
 	lpid = msg;
 	console.log('recieved welcome, id is ' + msg);
-	var lp = Player.create(lpid, "Mark");
+
+	var playerName;
+	// playerName = (prompt('Enter your name:') || ('Player ' + msg)).substring(0,16);
+	playerName = 'Mark';
+	var lp = Player.create(lpid, playerName);
+	socket.emit('myNameIs', playerName);
 	broadcast('player', lp.getNetworkInfo());
 });
 
 Vignette.create();
-
-Scoreboard.create();
 
 window.requestAnimationFrame(mainLoop);
 
