@@ -49,7 +49,7 @@ Scoreboard.draw = function(g){
 
 	if(this.zoomed){
 		g.translate(WIDTH/2, size*5*1.5);
-		g.scale(5, 5);
+		g.scale(3, 3);
 	} else {
 		g.translate(WIDTH-43, size*1.5);
 	}

@@ -120,8 +120,8 @@ socket.on('welcome', function(msg){
 	console.log('recieved welcome, id is ' + msg);
 
 	var playerName;
-	// playerName = (prompt('Enter your name:') || ('Player ' + msg)).substring(0,16);
-	playerName = 'Mark';
+	playerName = (prompt('Enter your name:') || ('Player ' + msg)).substring(0,16);
+	// playerName = 'Mark';
 	var lp = Player.create(lpid, playerName);
 	socket.emit('myNameIs', playerName);
 	broadcast('player', lp.getNetworkInfo());

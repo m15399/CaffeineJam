@@ -31,8 +31,9 @@ var Sounds = {
 	knockback: Sound.create('/knockback.wav', 2, false),
 	projectile: Sound.create('/projectile.wav', 4, false),
 	select: Sound.create('/select.wav', 1, false),
-	music: Sound.create('/SugarRush.mp3', 1, true, .5)
+	music: Sound.create('/SugarRush.mp3', 1, false, .5)
 }
+
 
 
 
