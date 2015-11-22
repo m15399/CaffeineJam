@@ -1,14 +1,4 @@
 
-
-/*
-
-music
-bumping?
-big text
-fall animation
-
-*/
-
 var canvas = document.getElementsByTagName('canvas')[0];
 var g = canvas.getContext('2d');
 canvas.mozImageSmoothingEnabled = false;
@@ -84,7 +74,7 @@ function mainLoop(){
 
 	g.fillStyle = 'white';
 	g.font = '12px Arial';
-	g.fillText(fps, 10, 22);
+	// g.fillText(fps, 10, 22);
 
 	framesThisSec++;
 
@@ -138,6 +128,11 @@ socket.on('welcome', function(msg){
 });
 
 Vignette.create();
+
+Background.create();
+
+Sounds.music.play();
+
 
 window.requestAnimationFrame(mainLoop);
 

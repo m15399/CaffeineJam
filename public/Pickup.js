@@ -77,6 +77,8 @@ Pickup.update = function(dt){
 		this.active = false;
 		socket.emit('killPu', this.id);
 		p.caf += this.caf;
+
+		BigText.create(p.caf);
 	}
 }
 

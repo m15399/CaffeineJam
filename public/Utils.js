@@ -138,5 +138,80 @@ Title.draw = function(g){
 	g.restore();
 }
 
+var BigText = makeClass('BigText', GameObject);
+
+BigText.init = function(caf){
+
+	var t = '';
+	caf = caf/2;
+
+	switch(caf){
+		case 3:
+			t = 'CAFFEINATED';
+			break;
+		case 5:
+			t = 'WIDE EYED';
+			break;
+		case 7:
+			t = 'BLOOD RUSH';
+			break;
+	}
+	if(caf >= 10){
+		t = 'BREWING SPREE';
+	}
+
+	if(t == '') return;
+
+	GameObject.init.apply(this);
+
+	this.time = 0;
+	this.drawOrder = 30;
+
+	this.text = t;
+	this.shake = caf;
+}
+
+BigText.update = function(dt){
+	this.time += dt;
+	if(this.time > 5)
+		this.destroy();
+}
+
+BigText.draw = function(g){
+	var alpha = ((1 - this.time) / 1.5);
+	alpha = clamp(alpha, 0, 1);
+
+	var s = this.time * .75 + 1;
+
+	g.save();
+	camera.reverseTransform(g);
+
+	g.globalAlpha = alpha;
+
+	g.translate(WIDTH/2 + randomDouble(-this.shake, this.shake), 
+		HEIGHT/2 + randomDouble(-this.shake, this.shake));
+	g.scale(s, s);
+
+	g.fillStyle = 'white';
+	g.font = '72px Arial';
+	g.textAlign = 'center';
+	g.fillText(this.text, 0, 0);
+
+	g.globalAlpha = 1;
+	g.restore();
+}
+
+BigText.create();
+
+
+
+
+
+
+
+
+
+
+
 
 

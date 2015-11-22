@@ -26,9 +26,11 @@ function randomInt(min, max){
 
 function generateMap(numPlayers){
 
-  var side = Math.round(Math.sqrt(numPlayers * 42));
-  w = side+2;
-  h = side;
+  var goal = numPlayers * 36;
+  var side = Math.round(Math.sqrt(goal));
+  w = Math.round((Math.random() * .5 + .75) * side);
+  h = Math.round(goal / w);
+  w += 2;
   tiles = [];
 
   for(var i = 0; i < w * h; i++){
@@ -107,6 +109,8 @@ function startAGame(){
 }
 
 function endGame(){
+  clearTimeout(endTimeout);
+
   io.emit('endGame', undefined);
   setTimeout(function(){
     startAGame();
@@ -150,6 +154,9 @@ io.on('connection', function(socket){
   socket.on('hax', function(msg){
     if(msg == 'end'){
       endGame();
+    } 
+    if(msg == 'dc'){
+      dcAll();  
     }
   });
 
@@ -167,26 +174,30 @@ io.on('connection', function(socket){
 
   socket.on('myNameIs', function(msg){
   	socket.playerName = msg;
-    console.log(msg + ' connected!');
+    console.log(msg + ' connected! ' + numPlayers + ' players');
   });
 
-  // socket.on('dcAll', function(msg){
-  //   for (var id in io.sockets.connected) {
-  //     if (io.sockets.connected.hasOwnProperty(id)) {
-  //       var sock = io.sockets.connected[id];
-  //       console.log('disconeccting ' + sock.id);  
-  //       sock.disconnect();
-  //     }
-  //   }
-  // });
-
   socket.on('disconnect', function(){
-    console.log(socket.playerName + ' disconnected');
     dcPlayer(socket.pid);
     socket.broadcast.emit('dcPlayer', socket.pid);
     numPlayers--;
+    console.log(socket.playerName + ' disconnected. ' + numPlayers + ' players');
   });
 });
+
+function dcAll(){
+  for (var id in io.sockets.connected) {
+      if (io.sockets.connected.hasOwnProperty(id)) {
+        var sock = io.sockets.connected[id];
+        console.log('disconeccting ' + sock.id);  
+        sock.disconnect();
+      }
+    }
+    var pickups = [];
+    var players = [];
+    var freePlayers = [];
+    var numPlayers = 0;
+}
 
 var port = 9000;
 

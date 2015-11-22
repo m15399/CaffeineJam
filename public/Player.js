@@ -16,8 +16,10 @@ socket.on('player', function(msg){
 });
 
 socket.on('dcPlayer', function(pid){
-	players[pid].destroy();
-	players[pid] = undefined;
+	if(players[pid]){
+		players[pid].destroy();
+		players[pid] = undefined;
+	}
 });
 
 var Player = makeClass('Player', GameObject);
@@ -185,6 +187,27 @@ Player.update = function(dt){
 					b.destroy();
 					broadcast('killB', [b.x, b.y]);
 				}
+			}
+		}
+
+		// check cols with players
+		for(var i = 0; i < players.length; i++){
+			var p = players[i];
+			if(!p || p.id == lpid) 
+				continue;
+
+			var dx = this.x - p.x;
+			var dy = this.y - p.y;
+
+			var dist = Math.sqrt(dx * dx + dy * dy);
+			if(dist < 45){
+				dx = dx/dist;
+				dy = dy/dist;
+				var hitForce = 200 + this.caf * 20;
+				this.xv += dx * hitForce;
+				this.yv += dy * hitForce;
+				this.updateServer();
+				Sounds.knockback.play();
 			}
 		}
 

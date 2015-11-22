@@ -1,13 +1,15 @@
 
 var Sound = makeClass('Sound');
 
-Sound.init =function(fn, num, loop){
+Sound.init =function(fn, num, loop, vol){
+	vol = vol || 1;
 	this.audios = [];
 	for(var i = 0; i < num; i++){
 		this.audios[i] = new Audio();
 		this.audios[i].src = fn;
 		if(loop)
 			this.audios[i].loop = true;
+		this.audios[i].volume = vol;
 	}
 	this.curr = 0;
 }
@@ -29,8 +31,9 @@ var Sounds = {
 	knockback: Sound.create('/knockback.wav', 2, false),
 	projectile: Sound.create('/projectile.wav', 4, false),
 	select: Sound.create('/select.wav', 1, false),
-
+	music: Sound.create('/SugarRush.mp3', 1, true, .5)
 }
+
 
 
 
