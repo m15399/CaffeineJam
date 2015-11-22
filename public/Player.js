@@ -2,6 +2,7 @@
 var pImages = [
 	loadImage('red-hipster.png'),
 	loadImage('blue-hipster.png'),
+	loadImage('green-hipster.png'),
 ];
 
 socket.on('player', function(msg){
@@ -50,7 +51,7 @@ Player.init = function(id, name){
 }
 
 Player.updateServer = function(){
-	broadcast('player', this.getNetworkInfo());
+	broadcast('player', this.getNetworkInfo(1));
 }
 
 Player.getNetworkInfo = function(){
@@ -153,7 +154,7 @@ Player.update = function(dt){
 				var dy = (this.y-18) - b.y;
 
 				var dist = Math.sqrt(dx * dx + dy * dy);
-				if(dist < 30){
+				if(dist < 45){
 					
 					var xDir = 0;
 					var yDir = 0;
@@ -166,12 +167,12 @@ Player.update = function(dt){
 					else 
 						yDir = -1;
 
-					console.log(xDir + ', ' + yDir);
-
-					var hitForce = 500 + this.caf * 10;
+					var hitForce = 400 + this.caf * 30;
 					this.xv += xDir * hitForce;
 					this.yv += yDir * hitForce;
 					this.updateServer();
+
+					Sounds.knockback.play();
 
 					b.destroy();
 					broadcast('killB', [b.x, b.y]);
@@ -227,8 +228,10 @@ Player.respawn = function(){
 	this.caf = 0;
 	this.bounceTime = Math.random() * Math.PI * 2;
 
-	if(lpid == this.id)
+	if(lpid == this.id){
 		this.updateServer();
+		Sounds.fall.play();
+	}
 }
 
 Player.collidesWithTile = function(x, y){
@@ -262,6 +265,7 @@ Player.draw = function(g){
 	// floor collision box
 	g.fillStyle = 'rgba(255, 0, 0, .5)';
 	// g.fillRect(this.x-this.fw/2, this.y-this.fh/2, this.fw, this.fh);
+
 }
 
 

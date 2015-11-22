@@ -48,7 +48,7 @@ function generateMap(){
       }
     }
   }
-  for(var i = 0; i < w * h / 100; i++){
+  for(var i = 0; i < w * h / 70; i++){
     replacePickup(i);
   }
 }
@@ -73,7 +73,7 @@ function getRandomFloorTile(){
 
 function replacePickup(num){
   var tile = getRandomFloorTile();
-  pickups[num] = [num, tile[0], tile[1]];
+  pickups[num] = [num, tile[0], tile[1], randomInt(0, 2)];
 }
 
 var pickups = [];
