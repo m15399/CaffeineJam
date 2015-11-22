@@ -20,4 +20,12 @@ Camera.getBottom = function(){
 	return this.y + HEIGHT;
 }
 
+Camera.applyTransform = function(){
+	g.translate(-camera.x, -camera.y);
+}
+
+Camera.reverseTransform = function(){
+	g.translate(camera.x, camera.y);
+}
+
 var camera = Camera.create();

@@ -13,14 +13,9 @@
 <script>
 
 var socket = io();
-var sid;
+var lpid;
 
 console.log('***************');
-
-socket.on('welcome', function(msg){
-	sid = msg;
-	console.log('recieved welcome, id is ' + msg);
-});
 
 socket.emit('myNameIs', 'bob');
 
@@ -41,6 +36,9 @@ socket.emit('myNameIs', 'bob');
 <script src="/Camera.js"></script>
 <script src="/Player.js"></script>
 <script src="/Pickup.js"></script>
+<script src="/Bullet.js"></script>
+<script src="/Vignette.js"></script>
+<script src="/Scoreboard.js"></script>
 
 <!-- Main -->
 <script src="/game.js"></script>

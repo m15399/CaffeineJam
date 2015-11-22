@@ -53,3 +53,34 @@ function rectsCollide(cx, cy, w, h, cx2, cy2, w2, h2){
 	}
 	return false;
 }
+
+
+function drawShadow(g, x, y, w, h){
+	g.fillStyle = 'rgba(0,0,0,.65)';
+	g.fillRect(x-w/2, y-h/2, w, h);
+
+}
+
+function broadcast(name, msg){
+	socket.emit('msg', [name, msg]);
+}
+
+function copyExisting(objs){
+	var os = [];
+	for(var i = 0; i < objs.length; i++){
+		if(objs[i] != undefined){
+			os.push(objs[i]);
+		}
+	}
+	return os;
+}
+
+function roundArray(a){
+	var mult = 1000;
+	for(var i = 0; i < a.length; i++){
+		if(typeof a[i] == typeof 0){
+			a[i] = Math.round(a[i] * mult) / mult;
+		}
+	}
+	return a;
+}

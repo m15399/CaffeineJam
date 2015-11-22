@@ -47,10 +47,25 @@ function updateAll(dt){
 }
 
 function drawAll(g){
-	for(var i = 0; i < allObjects.length; i++){
-		if(allObjects[i] != undefined)
-			allObjects[i].draw(g);
+	var os = copyExisting(allObjects);
+	os.sort(function(a, b){
+		return a.drawOrder - b.drawOrder;
+	});
+
+	for(var i = 0; i < os.length; i++){
+		if(os[i] != undefined)
+			os[i].draw(g);
 	}
+}
+
+function getObjectsByTag(tag){
+	var ret = [];
+	for(var i = 0; i < allObjects.length; i++){
+		var o = allObjects[i];
+		if(o && o.tag == tag)
+			ret.push(o);
+	}
+	return ret;
 }
 
 //
@@ -59,6 +74,7 @@ var GameObject = makeClass('GameObject');
 
 GameObject.init = function(){
 	newObjects.push(this);
+	this.drawOrder = 0;
 }
 
 GameObject.update = function(dt){}

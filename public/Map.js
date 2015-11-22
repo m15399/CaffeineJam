@@ -3,6 +3,8 @@
 var tileImages = [
 	undefined,
 	loadImage('wood-tile.png'),
+	loadImage('broken-wood-left.png'),
+	loadImage('broken-wood-right.png'),
 ];
 
 var Map = makeClass('Map', GameObject);
@@ -10,35 +12,54 @@ var Map = makeClass('Map', GameObject);
 Map.init = function(){
 	GameObject.init.apply(this);
 
-	this.w = 32;
-	this.h = 32;
+	this.w = 16;
+	this.h = 16;
 
 	this.tiles = [];
-
-	this.generateTiles();
-}
-
-Map.generateTiles = function(){
-	for(var i = 0; i < this.w * this.h; i++){
+	for(var i = 0; i < 16 * 16; i++){
 		this.tiles[i] = 1;
 	}
+	this.drawOrder = -10;
+}
 
-	var holes = this.w * this.h / 8;
+Map.setTiles = function(w, h, ts){
+	this.w = w;
+	this.h = h;
+	this.tiles = ts;
+	this.fixTiles();
+}
 
-	for(var i = 0; i < holes; i++){
-		var x = randomInt(0, this.w);
-		var y = randomInt(0, this.h);
-
-		for(var j = x; j < x+2 && j < this.w; j++){
-			for(var k = y; k < y+2 && k < this.h; k++){
-				this.tiles[k*this.w + j] = 0;
+Map.fixTiles = function(){
+	// put broken edges
+	for(var i = 0; i < this.w; i++){
+		for(var j = 0; j < this.h; j++){
+			if(this.getTile(i, j) != 0)
+				continue;
+			if(this.getTile(i-1, j) != 1 && this.getTile(i+1, j) == 1){
+				this.tiles[j * this.w + i] = 3;
+			} else if (this.getTile(i+1, j) != 1 && this.getTile(i-1, j) == 1){
+				this.tiles[j * this.w + i] = 2;
 			}
 		}
 	}
 }
 
 Map.getTile = function(x, y){
+	if(x < 0 || x >= this.w)
+		return 0;
+	if(y < 0 || y >= this.h)
+		return 0;
 	return this.tiles[this.w * y + x];
+}
+
+Map.getRandomFloorTile = function(){
+	var x = randomInt(0, this.w-1);
+	var y = randomInt(0, this.h-1);
+	if(this.getTile(x, y) == 1){
+		return [x, y];
+	} else {
+		return this.getRandomFloorTile();
+	}
 }
 
 Map.draw = function(g){
@@ -53,7 +74,7 @@ Map.draw = function(g){
 			var x = i * 64;
 			var y = j * 64;
 
-			var image = tileImages[this.tiles[j * this.w + i]];
+			var image = tileImages[this.getTile(i, j)];
 
 			if(image)
 				g.drawImage(image, x, y);

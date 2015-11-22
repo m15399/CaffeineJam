@@ -30,6 +30,8 @@ var lastSecTime = lastTime;
 var framesThisSec = 0;
 var fps = 0;
 
+
+
 function mainLoop(){
 	var now = Date.now();
 	var dt = (now - lastTime)/1000;
@@ -58,7 +60,7 @@ function mainLoop(){
 	g.translate(leftSide, 0);
 	g.scale(scaleFac, scaleFac);
 
-	g.translate(-camera.x, -camera.y);
+	camera.applyTransform(g);
 	drawAll(g);
 
 	g.restore();
@@ -87,10 +89,23 @@ function mainLoop(){
 }
 
 var map = Map.create();
-for(var i = 0; i < 50; i++){
-	Pickup.create(randomDouble(0, 64 * map.w), randomDouble(0, 64 * map.h))
-}
-var player = Player.create();
+
+socket.on('map', function(msg){
+	map.setTiles(msg[0],msg[1],msg[2]);
+});
+
+var players = [];
+
+socket.on('welcome', function(msg){
+	lpid = msg;
+	console.log('recieved welcome, id is ' + msg);
+	var lp = Player.create(lpid, "Mark");
+	broadcast('player', lp.getNetworkInfo());
+});
+
+Vignette.create();
+
+Scoreboard.create();
 
 window.requestAnimationFrame(mainLoop);
 
